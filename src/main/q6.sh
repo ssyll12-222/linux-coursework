@@ -5,6 +5,8 @@ set -eu
 input=${1:?需要输入目录}
 output=${2:?需要输出目录}
 
-# TODO：删除下方提示和 exit 77，再填写你的命令。
-printf '%s\n' 'Q6 尚未实现' >&2
-exit 77
+deb=$(find "$input" -maxdepth 1 -name '*.deb' -print -quit)
+sysroot=$output/sysroot
+mkdir -p "$sysroot"
+dpkg --root="$sysroot" --force-not-root --force-script-chrootless -i "$deb"
+"$sysroot/usr/bin/aim-sentry-info" > "$output/tool-output.txt"
